@@ -2,21 +2,21 @@
 
 This guide is written for a local installation of Apache Druid for demonstration purposes. For production deployments, the overall process should be similar, however you may notice some variation in the directory structure etc. 
 
-Requirements
+## Requirements
 * New Relic Account
 * Prometheus Server
 * Apache Druid Server
 * Prometheus Extension for Druid
 
 
-High Level Process
+## High Level Process
 * Update runtime.properties files in Druid runtimes
 * Configure Prometheus server to point to Druid endpoints
 * Configure Prometheus to point to New Relic Remote Write Endpoint
 * Deploy Dashboard in New Relic and configure alerts
 
 
-Getting Started
+## Getting Started
 In your Druid deployment, there are likely six different processes that you’ll want to monitor. To view the metrics for these processes, you’ll need to configure a druid.emitter for each. This will expose the metrics and allow them to be scraped and forwarded by Prometheus. These are the six processes:
 
 * Common
@@ -27,7 +27,7 @@ In your Druid deployment, there are likely six different processes that you’ll
 * Router
 
 
-Common Runtime
+## Common Runtime
 For starters, in order to configure monitoring for Druid, you’ll need to expose the metrics using the prometheus.emitter. We’ll get this installed later in the doc, but for now, let’s add the necessary lines in our config files. 
 
 In the _common directory, open the common.runtime.properties file and find the extensions list. Then, add prometheus.emitter at the end, see below for reference:
@@ -39,7 +39,7 @@ druid.extensions.loadList=["druid-hdfs-storage", "druid-kafka-indexing-service",
 ```
 
 
-All Other Runtimes
+## All Other Runtimes
 In the Broker, Coordinator-Overlord, Historical, MiddleManager, and Router folders, open the runtime.properties file and paste the following snippet at the end of each:
 ```
 # Monitoring
@@ -51,7 +51,7 @@ druid.emitter.prometheus.port=19092
 ```
 
 
-Installing the Prometheus Emitter Extension
+## Installing the Prometheus Emitter Extension
 Now that you’ve configured the runtime properties with the necessary monitoring settings, you’ll want to install the prometheus extension. This includes a number of jar files that will be called when the server starts up. Run the following command from the install path where you have Apache Druid set up (typically ~/apache-druid-24.0.0/):
 ```
 cd ~/apache-druid-24.0.0/
@@ -67,7 +67,7 @@ java \
 ```
 
 
-Configure Prometheus Scraping
+## Configure Prometheus Scraping
 Install and set up Prometheus following their guide.  Next, you can follow this guide to get the remote_write URL to send metrics to New Relic - or you can use this link to leverage our guided installation. Here’s an example of what the prometheus.yml file could look like. 
 ```
 # my global config
@@ -97,12 +97,12 @@ scrape_configs:
       - targets: ["localhost:19095"]
 ```
 
-Configure Infrastructure and Log Monitoring
+## Configure Infrastructure and Log Monitoring
 
-Infrastructure Monitoring
+### Infrastructure Monitoring
 We have a guided installation to automatically install and configure New Relic’s Infrastructure Agent. This will allow you to see host level metrics for CPU, Memory, Storage etc. These will be vital for understanding the overall health of your Apache Druid server. Alternative to the guided install, you can instead install and configure the agent manually. 
 
-Log Monitoring
+### Log Monitoring
 New Relic’s Infrastructure automatically comes with a Log Forward installed. Open the log configuration file:
 ```
 nano /etc/newrelic-infra/logging.d/logging.yml
