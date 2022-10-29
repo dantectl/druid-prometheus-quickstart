@@ -1,0 +1,355 @@
+{
+  "name": "Apache Druid",
+  "description": null,
+  "permissions": "PUBLIC_READ_WRITE",
+  "pages": [
+    {
+      "name": "Apache Druid",
+      "description": null,
+      "widgets": [
+        {
+          "title": "Data Sources",
+          "layout": {
+            "column": 1,
+            "row": 1,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.table"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountId": <account-id-here>,
+                "query": "FROM Metric SELECT count(*) as 'Metrics Per Data Source' FACET dataSource "
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Available Metrics",
+          "layout": {
+            "column": 5,
+            "row": 1,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.table"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountId": <account-id-here>,
+                "query": "SELECT count(*) FROM Metric SINCE 30 MINUTES AGO facet metricName limit max where instrumentation.source = 'prometheus-druid'"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "",
+          "layout": {
+            "column": 9,
+            "row": 1,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.markdown"
+          },
+          "rawConfiguration": {
+            "text": "# Apache Druid\nMonitoring for the following runtimes\n* Common\n* Broker\n* Router\n* Historical\n* Middle Manager\n* Coordinator"
+          }
+        },
+        {
+          "title": "Avg Druid Segment Size",
+          "layout": {
+            "column": 1,
+            "row": 4,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.billboard"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountId": <account-id-here>,
+                "query": "SELECT average(druid_segment_size) AS  'MiB' FROM Metric SINCE 30 MINUTES AGO "
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Time to First Byte",
+          "layout": {
+            "column": 5,
+            "row": 4,
+            "width": 8,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "legend": {
+              "enabled": true
+            },
+            "nrqlQueries": [
+              {
+                "accountId": <account-id-here>,
+                "query": "SELECT average(druid_query_node_ttfb_sum) FROM Metric SINCE 60 MINUTES AGO TIMESERIES facet server"
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            },
+            "yAxisLeft": {
+              "zero": true
+            }
+          }
+        },
+        {
+          "title": "JVM Memory Utilization",
+          "layout": {
+            "column": 1,
+            "row": 7,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.billboard"
+          },
+          "rawConfiguration": {
+            "dataFormatters": [],
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountId": <account-id-here>,
+                "query": "SELECT latest(druid_jvm_mem_used) / latest(druid_jvm_mem_max) FROM Metric SINCE 30 MINUTES AGO facet CASES(where instance = 'localhost:19091' as 'Broker', where instance = 'localhost:19092' as 'Coordinator', where instance = 'localhost:19093' as 'Historical', where instance = 'localhost:19094' as 'MiddleManager', where instance = 'localhost:19095' as 'Router' )  "
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "JVM Pool Utilization ",
+          "layout": {
+            "column": 5,
+            "row": 7,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.bar"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountId": <account-id-here>,
+                "query": "SELECT latest(druid_jvm_pool_used) / latest(druid_jvm_pool_max)  FROM Metric SINCE 30 MINUTES AGO facet poolName "
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "JVM Pool Utilization by Runtime",
+          "layout": {
+            "column": 9,
+            "row": 7,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.bar"
+          },
+          "rawConfiguration": {
+            "facet": {
+              "showOtherSeries": false
+            },
+            "nrqlQueries": [
+              {
+                "accountId": <account-id-here>,
+                "query": "SELECT latest(druid_jvm_pool_used) / latest(druid_jvm_pool_max)  FROM Metric SINCE 30 MINUTES AGO facet CASES(where instance = 'localhost:19091' as 'Broker', where instance = 'localhost:19092' as 'Coordinator', where instance = 'localhost:19093' as 'Historical', where instance = 'localhost:19094' as 'MiddleManager', where instance = 'localhost:19095' as 'Router' )  "
+              }
+            ],
+            "platformOptions": {
+              "ignoreTimeRange": false
+            }
+          }
+        },
+        {
+          "title": "Druid Logs - Error Messages",
+          "layout": {
+            "column": 1,
+            "row": 10,
+            "width": 12,
+            "height": 4
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "logger.log-table-widget"
+          },
+          "rawConfiguration": {
+            "nrqlQueries": [
+              {
+                "accountId": <account-id-here>,
+                "query": "FROM Log SELECT message where hostname = '97.107.139.165' where logtype = 'apache-druid' "
+              }
+            ]
+          }
+        },
+        {
+          "title": "CPU usage (%)",
+          "layout": {
+            "column": 1,
+            "row": 14,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "config": {
+              "bisect": {
+                "position": null
+              }
+            },
+            "legend": {
+              "enabled": false
+            },
+            "nrqlQueries": [
+              {
+                "accountId": "<account-id-here>",
+                "events": {
+                  "agent_ids": [
+                    "5268576161517234595"
+                  ]
+                },
+                "query": "SELECT average(host.cpuPercent) AS 'CPU used %' FROM Metric WHERE `entityGuid` = '<Host-entity-guid-here>' TIMESERIES auto"
+              }
+            ],
+            "yAxisLeft": {
+              "max": 100,
+              "min": 0,
+              "zero": null
+            }
+          }
+        },
+        {
+          "title": "Memory usage (%)",
+          "layout": {
+            "column": 5,
+            "row": 14,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.line"
+          },
+          "rawConfiguration": {
+            "config": {
+              "bisect": {
+                "position": null
+              }
+            },
+            "legend": {
+              "enabled": false
+            },
+            "nrqlQueries": [
+              {
+                "accountId": "<account-id-here>",
+                "events": {
+                  "agent_ids": [
+                    "5268576161517234595"
+                  ]
+                },
+                "query": "SELECT average(host.memoryUsedPercent) AS 'Memory used %' FROM Metric WHERE `entityGuid` = '<Host-entity-guid-here>' TIMESERIES auto"
+              }
+            ],
+            "yAxisLeft": {
+              "max": 100,
+              "min": 0,
+              "zero": null
+            }
+          }
+        },
+        {
+          "title": "Processes running",
+          "layout": {
+            "column": 9,
+            "row": 14,
+            "width": 4,
+            "height": 3
+          },
+          "linkedEntityGuids": null,
+          "visualization": {
+            "id": "viz.table"
+          },
+          "rawConfiguration": {
+            "config": {
+              "bisect": {
+                "position": null
+              }
+            },
+            "nrqlQueries": [
+              {
+                "accountId": "<account-id-here>",
+                "events": {
+                  "agent_ids": [
+                    "5268576161517234595"
+                  ]
+                },
+                "query": "SELECT latest(host.process.cpuPercent) as 'CPU %', latest(host.process.threadCount) as 'Threads' FROM Metric FACET processId, processDisplayName WHERE `entityGuid` = '<Host-entity-guid-here>' ORDER BY cpuPercent asc LIMIT 100"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
