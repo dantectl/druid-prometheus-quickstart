@@ -3,10 +3,10 @@
 This guide is written for a local installation of Apache Druid for demonstration purposes. For production deployments, the overall process should be similar, however you may notice some variation in the directory structure etc. 
 
 ## Requirements
-* New Relic Account
-* Prometheus Server
-* Apache Druid Server
-* Prometheus Extension for Druid
+* [New Relic Account](https://newrelic.com/signup/) - *free to sign up*
+* [Prometheus Server](https://prometheus.io/docs/prometheus/latest/getting_started/)
+* [Apache Druid Server](https://druid.apache.org/docs/latest/tutorials/index.html)
+* [Prometheus Extension for Druid](https://druid.apache.org/docs/latest/development/extensions.html#loading-extensions)
 
 
 ## High Level Process
