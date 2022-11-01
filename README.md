@@ -1,5 +1,7 @@
 # druid-prometheus-quickstart
 
+Instructions on how to monitor Apache Druid using Prometheus and New Relic
+
 *This guide is written for a local installation of Apache Druid for demonstration purposes. For production deployments, the overall process should be similar, however you may notice some variation in the directory structure etc.* 
 
 ## Requirements
